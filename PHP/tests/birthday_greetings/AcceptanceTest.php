@@ -12,7 +12,7 @@ class AcceptanceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->birthdayService = new BirthdayService();
+        $this->birthdayService = new BirthdayService(new FileEmployeeRepository('employee_data.txt'));
         $this->deleteAllEmails();
     }
 
@@ -32,7 +32,6 @@ class AcceptanceTest extends TestCase
     public function testWillSendGreetingsWhenItsSomebodysBirthday(): void
     {
         $this->birthdayService->sendGreetings(
-            'employee_data.txt',
             new XDate('2008/10/08'),
             'maildev',
             self::SMTP_PORT
@@ -54,7 +53,6 @@ class AcceptanceTest extends TestCase
     public function testWillNotSendEmailsWhenNobodysBirthday(): void
     {
         $this->birthdayService->sendGreetings(
-            'employee_data.txt',
             new XDate('2008/01/01'),
             'maildev',
             self::SMTP_PORT

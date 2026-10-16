@@ -9,11 +9,11 @@ class Main
 {
     public static function main(): void
     {
-        $service = new BirthdayService();
-        $service->sendGreetings('employee_data.txt', new XDate(), 'maildev', 1025);
+        $service = new BirthdayService(new FileEmployeeRepository('employee_data.txt'));
+        $service->sendGreetings(new XDate(), 'maildev', 1025);
     }
 }
 
 if (php_sapi_name() === 'cli') {
     Main::main();
-}
+} 

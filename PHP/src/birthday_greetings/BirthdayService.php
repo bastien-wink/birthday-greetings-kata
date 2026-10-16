@@ -7,10 +7,16 @@ use PHPMailer\PHPMailer\Exception;
 
 class BirthdayService
 {
-    public function sendGreetings(string $fileName, XDate $xDate, string $smtpHost, int $smtpPort): void
+    private EmployeeRepository $employeeRepository;
+
+    public function __construct(EmployeeRepository $employeeRepository)
     {
-        $employeeRepository = new FileEmployeeRepository($fileName);
-        foreach ($employeeRepository->findAll() as $employee) {
+        $this->employeeRepository = $employeeRepository;
+    }
+
+    public function sendGreetings(XDate $xDate, string $smtpHost, int $smtpPort): void
+    {
+        foreach ($this->employeeRepository->findAll() as $employee) {
             if ($employee->isBirthday($xDate)) {
                 $recipient = $employee->getEmail();
                 $body = str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%!');
