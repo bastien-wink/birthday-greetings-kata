@@ -9,7 +9,8 @@ class BirthdayService
 {
     public function sendGreetings(string $fileName, XDate $xDate, string $smtpHost, int $smtpPort): void
     {
-        foreach ($this->loadEmployees($fileName) as $employee) {
+        $employeeRepository = new FileEmployeeRepository($fileName);
+        foreach ($employeeRepository->findAll() as $employee) {
             if ($employee->isBirthday($xDate)) {
                 $recipient = $employee->getEmail();
                 $body = str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%!');
@@ -22,37 +23,6 @@ class BirthdayService
                 }
             }
         }
-    }
-
-    /**
-     * @return Employee[]
-     */
-    private function loadEmployees(string $fileName): array
-    {
-        $handle = fopen($fileName, 'r');
-        if ($handle === false) {
-            throw new \RuntimeException("Could not open file: $fileName");
-        }
-
-        // Skip header
-        fgetcsv($handle, 0, ',', '"', '\\');
-
-        $employees = [];
-        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
-            if (count($data) < 4) {
-                continue; // Skip invalid lines
-            }
-
-            try {
-                $employees[] = new Employee(trim($data[1]), trim($data[0]), trim($data[2]), trim($data[3]));
-            } catch (\Exception $e) {
-                // Log error and continue with next employee
-                error_log("Error processing employee data: " . $e->getMessage());
-            }
-        }
-
-        fclose($handle);
-        return $employees;
     }
 
     private function sendMessage(string $smtpHost, int $smtpPort, string $sender, string $subject, string $body, string $recipient): void
