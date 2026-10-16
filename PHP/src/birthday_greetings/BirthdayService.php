@@ -26,7 +26,7 @@ class BirthdayService
                 $employee = new Employee(trim($data[1]), trim($data[0]), trim($data[2]), trim($data[3]));
                 if ($employee->isBirthday($xDate)) {
                     $recipient = $employee->getEmail();
-                    $body = str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%');
+                    $body = str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%!');
                     $subject = 'Happy Birthday!';
                     $this->sendMessage($smtpHost, $smtpPort, 'sender@here.com', $subject, $body, $recipient);
                 }
