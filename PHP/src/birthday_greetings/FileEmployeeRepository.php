@@ -2,7 +2,7 @@
 
 namespace BirthdayGreetings;
 
-class FileEmployeeRepository
+class FileEmployeeRepository implements EmployeeRepository
 {
     private string $fileName;
 
