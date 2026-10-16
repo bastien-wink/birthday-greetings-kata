@@ -1,6 +1,9 @@
 <?php
 
-namespace BirthdayGreetings;
+namespace BirthdayGreetings\Infrastructure;
+
+use BirthdayGreetings\Domain\Employee;
+use BirthdayGreetings\Domain\EmployeeRepository;
 
 class FileEmployeeRepository implements EmployeeRepository
 {

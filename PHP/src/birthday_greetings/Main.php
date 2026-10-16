@@ -2,6 +2,10 @@
 
 namespace BirthdayGreetings;
 
+use BirthdayGreetings\Domain\BirthdayService;
+use BirthdayGreetings\Domain\XDate;
+use BirthdayGreetings\Infrastructure\FileEmployeeRepository;
+
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 

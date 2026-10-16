@@ -2,6 +2,8 @@
 
 namespace BirthdayGreetings;
 
+use BirthdayGreetings\Domain\Employee;
+use BirthdayGreetings\Domain\XDate;
 use PHPUnit\Framework\TestCase;
 
 class EmployeeTest extends TestCase

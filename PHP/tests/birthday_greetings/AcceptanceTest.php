@@ -2,6 +2,9 @@
 
 namespace BirthdayGreetings;
 
+use BirthdayGreetings\Domain\BirthdayService;
+use BirthdayGreetings\Domain\XDate;
+use BirthdayGreetings\Infrastructure\FileEmployeeRepository;
 use PHPUnit\Framework\TestCase;
 
 class AcceptanceTest extends TestCase
