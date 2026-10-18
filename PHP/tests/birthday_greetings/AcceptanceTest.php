@@ -5,6 +5,7 @@ namespace BirthdayGreetings;
 use BirthdayGreetings\Domain\BirthdayService;
 use BirthdayGreetings\Domain\XDate;
 use BirthdayGreetings\Infrastructure\FileEmployeeRepository;
+use BirthdayGreetings\Infrastructure\SmtpGreetingsSender;
 use PHPUnit\Framework\TestCase;
 
 class AcceptanceTest extends TestCase
@@ -15,7 +16,10 @@ class AcceptanceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->birthdayService = new BirthdayService(new FileEmployeeRepository('employee_data.txt'));
+        $this->birthdayService = new BirthdayService(
+            new FileEmployeeRepository('employee_data.txt'),
+            new SmtpGreetingsSender('maildev', self::SMTP_PORT, 'sender@here.com'),
+        );
         $this->deleteAllEmails();
     }
 
@@ -34,11 +38,7 @@ class AcceptanceTest extends TestCase
 
     public function testWillSendGreetingsWhenItsSomebodysBirthday(): void
     {
-        $this->birthdayService->sendGreetings(
-            new XDate('2008/10/08'),
-            'maildev',
-            self::SMTP_PORT
-        );
+        $this->birthdayService->sendGreetings(new XDate('2008/10/08'));
 
         // Wait for email to be processed
         usleep(200_000);
@@ -55,11 +55,7 @@ class AcceptanceTest extends TestCase
 
     public function testWillNotSendEmailsWhenNobodysBirthday(): void
     {
-        $this->birthdayService->sendGreetings(
-            new XDate('2008/01/01'),
-            'maildev',
-            self::SMTP_PORT
-        );
+        $this->birthdayService->sendGreetings(new XDate('2008/01/01'));
 
         // Wait for any potential emails to be processed
         usleep(200_000);
