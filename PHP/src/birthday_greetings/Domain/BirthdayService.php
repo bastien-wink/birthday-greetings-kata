@@ -18,11 +18,13 @@ class BirthdayService
     {
         foreach ($this->employeeRepository->findAll() as $employee) {
             if ($employee->isBirthday($xDate)) {
-                $recipient = $employee->getEmail();
-                $body = str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%!');
-                $subject = 'Happy Birthday!';
+                $greeting = new Greeting(
+                    $employee->getEmail(),
+                    'Happy Birthday!',
+                    str_replace('%NAME%', $employee->getFirstName(), 'Happy Birthday, dear %NAME%!'),
+                );
                 try {
-                    $this->sendMessage($smtpHost, $smtpPort, 'sender@here.com', $subject, $body, $recipient);
+                    $this->sendMessage($smtpHost, $smtpPort, 'sender@here.com', $greeting);
                 } catch (\Exception $e) {
                     // Log error and continue with next employee
                     error_log("Error sending greetings: " . $e->getMessage());
@@ -31,7 +33,7 @@ class BirthdayService
         }
     }
 
-    private function sendMessage(string $smtpHost, int $smtpPort, string $sender, string $subject, string $body, string $recipient): void
+    private function sendMessage(string $smtpHost, int $smtpPort, string $sender, Greeting $greeting): void
     {
         $mail = new PHPMailer(true);
 
@@ -44,12 +46,12 @@ class BirthdayService
 
             // Recipients
             $mail->setFrom($sender);
-            $mail->addAddress($recipient);
+            $mail->addAddress($greeting->email);
 
             // Content
             $mail->isHTML(false);
-            $mail->Subject = $subject;
-            $mail->Body = $body;
+            $mail->Subject = $greeting->subject;
+            $mail->Body = $greeting->body;
 
             $mail->send();
         } catch (Exception $e) {
