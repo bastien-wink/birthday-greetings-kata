@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+// Composition root: the only file that knows both the domain and the adapters.
+
+use BirthdayGreetings\Domain\BirthdayService;
+use BirthdayGreetings\Domain\XDate;
+use BirthdayGreetings\Infrastructure\FileEmployeeRepository;
+use BirthdayGreetings\Infrastructure\SmtpGreetingsSender;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$service = new BirthdayService(
+    new FileEmployeeRepository(__DIR__ . '/../employee_data.txt'),
+    new SmtpGreetingsSender('maildev', 1025, 'sender@here.com'),
+);
+$service->sendGreetings(new XDate());
