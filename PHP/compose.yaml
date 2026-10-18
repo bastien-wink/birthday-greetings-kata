@@ -1,0 +1,20 @@
+name: birthday-greetings
+
+services:
+  php:
+    image: composer:2.8   # official Composer image: PHP 8.4, Composer, Git
+    container_name: php
+    working_dir: /app
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - .:/app
+    # keeps the container running, to use it with "docker compose exec"
+    command: ["sleep", "infinity"]
+    init: true
+
+  maildev:
+    image: maildev/maildev:2.2.1
+    container_name: maildev
+    ports:
+      - "1080:1080"   # MailDev web interface and API
+      - "1025:1025"   # MailDev SMTP server

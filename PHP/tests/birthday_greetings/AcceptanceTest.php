@@ -1,13 +1,13 @@
 <?php
 
-namespace birthday_greetings;
+namespace BirthdayGreetings;
 
 use PHPUnit\Framework\TestCase;
 
 class AcceptanceTest extends TestCase
 {
     private const SMTP_PORT = 1025; // MailDev's default SMTP port
-    private const API_URL = 'http://localhost:1080';
+    private const API_URL = 'http://maildev:1080';
     private BirthdayService $birthdayService;
 
     protected function setUp(): void
@@ -34,19 +34,19 @@ class AcceptanceTest extends TestCase
         $this->birthdayService->sendGreetings(
             'employee_data.txt',
             new XDate('2008/10/08'),
-            'localhost',
+            'maildev',
             self::SMTP_PORT
         );
 
         // Wait for email to be processed
-        sleep(1);
+        usleep(200_000);
 
         $emails = $this->getEmails();
         $this->assertCount(1, $emails, 'Expected exactly one email to be sent');
 
         $email = $emails[0];
         $this->assertEquals('Happy Birthday!', $email['subject']);
-        $this->assertEquals('Happy Birthday, dear John!', $email['text']);
+        $this->assertEquals('Happy Birthday, dear John!', trim($email['text']));
         $this->assertCount(1, $email['to']);
         $this->assertEquals('john.doe@foobar.com', $email['to'][0]['address']);
     }
@@ -56,14 +56,14 @@ class AcceptanceTest extends TestCase
         $this->birthdayService->sendGreetings(
             'employee_data.txt',
             new XDate('2008/01/01'),
-            'localhost',
+            'maildev',
             self::SMTP_PORT
         );
 
         // Wait for any potential emails to be processed
-        sleep(1);
+        usleep(200_000);
 
         $emails = $this->getEmails();
         $this->assertCount(0, $emails, 'Expected no emails to be sent');
     }
-} 
+}

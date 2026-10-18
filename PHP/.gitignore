@@ -1,9 +1,4 @@
-bin
-target
-.idea
-out
-target
-
 vendor
-.phpunit.result.cache
-smtpmock
+.phpunit.cache
+# bin/ est ignoré par le .gitignore racine (version Java) : le ré-inclure ici
+!bin/

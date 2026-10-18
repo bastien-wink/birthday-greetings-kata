@@ -6,24 +6,16 @@ The original Java version and its documentation can be found in the [original re
 
 ## Setup
 
-1. Make sure you have PHP 7.4 or higher installed
-2. Install Composer if you haven't already
-3. Run `composer install` to install dependencies
+Docker is the only requirement: `compose.yaml` starts MailDev, a test SMTP server, and a container from the official Composer image (PHP 8.4 and Composer).
 
-## Running the Tests
+```bash
+docker compose up -d
+docker compose exec php composer install
+docker compose exec php vendor/bin/phpunit
+docker compose exec php php src/birthday_greetings/Main.php
+```
 
-1. Start MailDev in a separate terminal:
-   ```bash
-   docker run -p 1080:1080 -p 1025:1025 maildev/maildev
-   ```
-   This will start a test SMTP server on port 1025 and a web interface on port 1080.
-
-2. Run the tests using PHPUnit:
-   ```bash
-   ./vendor/bin/phpunit
-   ```
-
-3. You can view received emails in your browser at http://localhost:1080
+The code reaches MailDev through its service name, `maildev`. Received emails are visible at http://localhost:1080.
 
 ## Project Structure
 
