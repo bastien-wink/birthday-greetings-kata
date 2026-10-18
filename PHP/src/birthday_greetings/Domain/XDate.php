@@ -34,4 +34,9 @@ class XDate
         return $anotherDate->getDay() === $this->getDay()
             && $anotherDate->getMonth() === $this->getMonth();
     }
+
+    public function isLeapYear(): bool
+    {
+        return $this->date->format('L') === '1';
+    }
 }
