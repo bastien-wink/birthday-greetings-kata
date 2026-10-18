@@ -3,10 +3,11 @@
 namespace BirthdayGreetings\Infrastructure;
 
 use BirthdayGreetings\Domain\Greeting;
+use BirthdayGreetings\Domain\GreetingsSender;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-class SmtpGreetingsSender
+class SmtpGreetingsSender implements GreetingsSender
 {
     public function __construct(
         private string $smtpHost,
